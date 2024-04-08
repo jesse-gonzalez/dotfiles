@@ -18,8 +18,11 @@ export LESS_TERMCAP_so=$'\E[38;5;246m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[04;38;5;146m'
 
-[[ -d /opt/kube-ps1 ]] || mkdir -p /opt/kube-ps1
-curl -o /opt/kube-ps1/kube-ps1.sh https://raw.githubusercontent.com/jonmosco/kube-ps1/master/kube-ps1.sh
+[[ -d /opt/kube-ps1 ]] || mkdir -p /opt/kube-ps1 && curl -o /opt/kube-ps1/kube-ps1.sh https://raw.githubusercontent.com/jonmosco/kube-ps1/master/kube-ps1.sh
+
+if [ -f /opt/kube-ps1/kube-ps1.sh ]; then
+  chmod +x /opt/kube-ps1/kube-ps1.sh
+fi
 
 ## function to set terminal title for bash or zsh
 function set_terminal_title() {                                                                                                                                
@@ -56,12 +59,6 @@ source <(kubectl completion bash)
 alias k='kubectl'
 complete -F __start_kubectl k
 export do='--dry-run=client -o yaml'
-
-
-
-if [ -f $HOME/.kube/*.cfg ]; then
-  echo "this is good"
-fi
 
 if [ -f $HOME/.kube/*.cfg ]; then
   export KUBECONFIG_HOME=$HOME/.kube
