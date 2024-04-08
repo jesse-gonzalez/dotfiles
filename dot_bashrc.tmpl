@@ -18,6 +18,22 @@ export LESS_TERMCAP_so=$'\E[38;5;246m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[04;38;5;146m'
 
+[[ -d /opt/kube-ps1 ]] || mkdir -p /opt/kube-ps1
+curl -o /opt/kube-ps1/kube-ps1.sh https://raw.githubusercontent.com/jonmosco/kube-ps1/master/kube-ps1.sh
+
+## function to set terminal title for bash or zsh
+function set_terminal_title() {                                                                                                                                
+  echo -en "\e]2;$@\a"                                                                                                                                         
+}
+
+## functions to manage git prompt
+function parse_git_dirty {
+  [[ $(git status --porcelain 2> /dev/null) ]] && echo "*"
+}
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1$(parse_git_dirty))/"
+}
+
 for files in ~/{.aliases,.functions,.kubectl_aliases,.vimrc}; do
   if [[ -r "$files" ]] && [[ -f "$files" ]]; then
     # shellcheck disable=SC1090
